@@ -30,10 +30,13 @@ int main(int argc, char* argv[])
   pid_t pid = fork();
   if (pid == 0) {
     close(fds[0]); //close read end
-    dup2(fds[1], 1); //sets write end to 1 fd
-
+    int new_fd = dup2(fds[1], 1); //sets write end to 1 fd
+    printf("efverferf\n");
     
     execvp(argv[1], &argv[1]);
+    close(new_fd);
+    close(fds[1]);
+    
     fprintf(stderr, "MyWordCount: %s\n", strerror(errno));
     return 0;
   }
